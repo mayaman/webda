@@ -3,13 +3,11 @@ class Display {
     this.numColumns = numColumns;
     this.maxTracksPerStep = maxTracksPerStep;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( 0x563FE8 );
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
     this.camera.position.z = 100;
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( window.innerWidth, window.innerHeight );
-    this.renderer.setClearColorHex( 0x563FE8, 1 );
     document.body.appendChild( this.renderer.domElement );
     this.animate = this.animate.bind(this);
 

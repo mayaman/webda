@@ -17,9 +17,9 @@ class Soundform {
     this.addToScene();
 
     if (x != 0 && y != 0) {
-      this.preview(options.duration);
-    } else {
       this.place(x,y)
+    } else {
+      this.preview(options.duration);
     }
 
   }
@@ -29,7 +29,7 @@ class Soundform {
   }
 
   removeFromScene(self) {
-    //this.display.removeForm(self.mesh);
+    this.display.removeForm(self.mesh);
   }
 
   playSound() {
@@ -37,6 +37,8 @@ class Soundform {
   }
 
   preview(length) {
+    this.display.scene.background = new THREE.Color( 0x563FE8 );
+
     this.playSound();
     //animate scale in
     var targetIn = new THREE.Vector3(5, 5, 5); // create on init
@@ -70,7 +72,10 @@ class Soundform {
 
     }, (length/3) * 2);
 
-    window.setTimeout(function() { self.removeFromScene(self) }, length + 10);
+    window.setTimeout(function() { 
+      this.display.scene.background = new THREE.Color( 0x000000 );
+      self.removeFromScene(self)
+    }, length + 10);
   }
 
   place( x, y ) {

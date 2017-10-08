@@ -53,11 +53,23 @@ document.onkeydown = function(e) {
     e.preventDefault();
 
     console.log('key name: ' + e.key);
-    console.log('are u working');
     var keyName = e.key;
-    // keyMappings[keyName].playSound();
-    // keyMappings[keyName].preview(800);
-    lastForm = new Soundform(display, drumMachine, keyMappings[keyName], 25, 25);
+
+    if (e.keyCode == 32) {
+      record = true;
+      return;
+    } else if (!keyMappings[keyName]) {
+      return; //don't cause error if press non-mapped key
+    }
+
+    if (!record) {
+      x = 0; y = 0;
+    } else {
+      x = 25; y = 25; //actually set this foreal later
+    }
+    console.log(x);
+    form = new Soundform(display, drumMachine, keyMappings[keyName], x, y);
+
 
     // if (e.keyCode == '72') {
     //   cube = new Soundform(display, 50, 50, false, formOpts["bass"]);
