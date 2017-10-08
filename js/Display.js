@@ -10,6 +10,15 @@ class Display {
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( this.renderer.domElement );
     this.animate = this.animate.bind(this);
+
+    this.grid = new Array();
+    for (var x = 0; x < this.numColumns; x++) {
+      this.grid[x] = new Array();
+      for (var y = 0; y < this.maxTracksPerStep; y++) {
+        this.grid[x][y] = {};
+      }
+    }
+
     this.animate();
   }
 
@@ -22,9 +31,15 @@ class Display {
   }
 
   animate() {
-    requestAnimationFrame( this.animate );
+    requestAnimationFrame(this.animate);
     // cube.rotation.x += 0.1;
     // cube.rotation.y += 0.1;
+
+    for (var i  = 0; i < this.grid.length; i++) {
+      for (var j = 0; j < this.grid[i].length; j++) {
+        // update visuals?
+      }
+    }
     this.renderer.render(this.scene, this.camera);
   };
 }
