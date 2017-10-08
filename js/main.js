@@ -22,18 +22,30 @@ display.animate();
 
 var forms = {};
 
+var formOpts = {
+  'cowbell': { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
+          "material": new THREE.MeshBasicMaterial( { color: 0xB246FF } ),
+          "duration": 400,
+          "sound": "C4"
+        },
+  'loose': { "geometry": new THREE.ConeGeometry( 10, 20, 32 ),
+          "material": new THREE.MeshBasicMaterial( { color: 0x5286FF } ),
+          "duration": 400,
+          "sound": "C3"
+        },
+  'bass': { "geometry": new THREE.DodecahedronGeometry( 10, 0),
+        "material": new THREE.MeshBasicMaterial( { color: 0x46FFDE } ),
+        "duration": 400,
+        "sound": "C4"
+      }
+}
+
 var keyMappings = {};
 
-// keyMappings['ArrowUp'] = new Soundform(display, drumMachine, "C3", 50, 50);
-// keyMappings['ArrowDown'] = new Soundform(display, drumMachine, "C4", 25, 25);
-
-
-var formOpts = {
-  'ArrowUp': { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
-          "material": new THREE.MeshBasicMaterial( { color: 0x00ff00 } ),
-          "duration": 400
-        }
-}
+keyMappings['w'] = formOpts["cowbell"];
+keyMappings['ArrowUp'] = formOpts["cowbell"];
+keyMappings['e'] = formOpts["loose"];
+keyMappings['r'] = formOpts["bass"];
 
 // Handle key presses
 document.onkeydown = function(e) {
@@ -45,7 +57,7 @@ document.onkeydown = function(e) {
     var keyName = e.key;
     // keyMappings[keyName].playSound();
     // keyMappings[keyName].preview(800);
-    var form = new Soundform(display, drumMachine, "C4", formOpts[keyName], 25, 25);
+    lastForm = new Soundform(display, drumMachine, keyMappings[keyName], 25, 25);
 
     // if (e.keyCode == '72') {
     //   cube = new Soundform(display, 50, 50, false, formOpts["bass"]);

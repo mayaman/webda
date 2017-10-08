@@ -1,9 +1,11 @@
 class Soundform {
-  constructor(display, drumMachine, sound, options, x, y) {
+  constructor(display, drumMachine, options, x, y) {
+    x = x || 0;
+    y = y || 0;
+
     this.display = display;
     this.drumMachine = drumMachine;
-    this.sound = sound;
-    console.log(options);
+    this.sound = options.sound;
     // this.geometry = new THREE.BoxGeometry( 10, 10, 10 );
     // this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
     this.mesh = new THREE.Mesh( options.geometry, options.material);
@@ -12,31 +14,32 @@ class Soundform {
     this.mesh.scale.x = .01;
     this.mesh.scale.y = .01;
     this.mesh.scale.z = .01;
-    this.addSound();
-    this.preview(options.duration);
+    this.addToScene();
+
+    if (x != 0 && y != 0) {
+      this.preview(options.duration);
+    } else {
+      this.place(x,y)
+    }
+
   }
 
-  addSound() {
-    // this.mesh = new THREE.Mesh( this.geometry, this.material);
+  addToScene() {
     this.display.addForm(this.mesh);
   }
 
-  removeSound(self) {
-    this.display.removeForm(self.mesh);
+  removeFromScene(self) {
+    //this.display.removeForm(self.mesh);
   }
 
   playSound() {
-    console.log('playing sound');
-    this.addSound();
     this.drumMachine.triggerAttack(this.sound);
-    var self = this;
-    window.setTimeout(function() {self.removeSound(self)},800)
   }
 
   preview(length) {
     this.playSound();
     //animate scale in
-    var targetIn = new THREE.Vector3(1, 1, 1); // create on init
+    var targetIn = new THREE.Vector3(5, 5, 5); // create on init
     animateVector3(this.mesh.scale, targetIn, {
       duration: length/3,
       easing : TWEEN.Easing.Bounce.In,
@@ -52,7 +55,7 @@ class Soundform {
     //destroy
     var self = this;
     window.setTimeout(function() {
-      var targetOut = new THREE.Vector3(0, 0, 0);
+      var targetOut = new THREE.Vector3(.1, .1, .1);
       animateVector3(self.mesh.scale, targetOut, {
       duration: length/3,
       easing : TWEEN.Easing.Bounce.Out,
@@ -67,7 +70,40 @@ class Soundform {
 
     }, (length/3) * 2);
 
-    window.setTimeout(function() { self.removeSound(self) }, length + 10);
+    window.setTimeout(function() { self.removeFromScene(self) }, length + 10);
+  }
+
+  place( x, y ) {
+    //tween to position
+    var targetPos = new THREE.Vector3(x, y, 0); // create on init
+    animateVector3(this.mesh.position, targetPos, {
+      duration: 500, 
+      easing : TWEEN.Easing.Elastic.Out,
+          update: function(d) {
+              console.log("Updating Tween: " + d);
+          },
+          callback : function(){
+              console.log("Completed Tween");
+          }
+    });
+
+    var targetScale = new THREE.Vector3(2, 2, 2);
+    animateVector3(this.mesh.scale, targetScale, {
+      duration: 500, 
+      easing : TWEEN.Easing.Elastic.Out,
+          update: function(d) {
+              console.log("Updating Tween: " + d);
+          },
+          callback : function(){
+              console.log("Completed Tween");
+          }
+    });
+  }
+
+  sequenceHit( ) {
+    this.playSound();
+
+    //play animation, rotate + jump?
   }
 
   getForm() {
