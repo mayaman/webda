@@ -1,44 +1,42 @@
 class Soundform {
-  constructor(display, drumMachine, sound, options, x, y) {
+  constructor(display, x, y, recordMode, options) {
+    recordMode = recordMode || false;
+    x = x || 0;
+    y = y || 0;
+
     this.display = display;
-    this.drumMachine = drumMachine;
-    this.sound = sound;
-    console.log(options);
-    // this.geometry = new THREE.BoxGeometry( 10, 10, 10 );
-    // this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    this.name = "cube";
     this.mesh = new THREE.Mesh( options.geometry, options.material);
-    this.mesh.position.x = x;
-    this.mesh.position.y = y;
+    this.mesh.position.x = 0;
+    this.mesh.position.y = 0;
     this.mesh.scale.x = .01;
     this.mesh.scale.y = .01;
     this.mesh.scale.z = .01;
     this.addSound();
-    this.preview(options.duration);
+
+    if (!recordMode) {
+      this.preview(options.duration);
+    } else {
+      this.place(x,y);
+    }
   }
 
   addSound() {
-    // this.mesh = new THREE.Mesh( this.geometry, this.material);
-    this.display.addForm(this.mesh);
+    //this.display.addForm(this.mesh);
+    this.display.scene.add(this.mesh);
   }
 
   removeSound(self) {
+    console.log("hi");
     this.display.removeForm(self.mesh);
   }
 
-  playSound() {
-    console.log('playing sound');
-    this.addSound();
-    this.drumMachine.triggerAttack(this.sound);
-    var self = this;
-    window.setTimeout(function() {self.removeSound(self)},800)
-  }
-
   preview(length) {
-    this.playSound();
+
     //animate scale in
     var targetIn = new THREE.Vector3(1, 1, 1); // create on init
     animateVector3(this.mesh.scale, targetIn, {
-      duration: length/3,
+      duration: length/3, 
       easing : TWEEN.Easing.Bounce.In,
           update: function(d) {
               //console.log("Updating Tween: " + d);
@@ -51,10 +49,10 @@ class Soundform {
 
     //destroy
     var self = this;
-    window.setTimeout(function() {
+    window.setTimeout(function() { 
       var targetOut = new THREE.Vector3(0, 0, 0);
       animateVector3(self.mesh.scale, targetOut, {
-      duration: length/3,
+      duration: length/3, 
       easing : TWEEN.Easing.Bounce.Out,
           update: function(d) {
               //console.log("Updating Tween: " + d);
@@ -64,16 +62,36 @@ class Soundform {
               //TODO: WAIT FOR DURATION TO END???
           }
     });
-
+      
     }, (length/3) * 2);
 
     window.setTimeout(function() { self.removeSound(self) }, length + 10);
   }
 
+  place(step) {
+    //tween to position
+    var target = new THREE.Vector3(100, -20, 20); // create on init
+    animateVector3(this.mesh.position, target, {
+    duration: 5000, 
+    easing : TWEEN.Easing.Quadratic.InOut,
+        update: function(d) {
+            console.log("Updating Tween: " + d);
+        },
+        callback : function(){
+            console.log("Completed Tween");
+        }
+    });
+  }
+
+  playback() {
+    //playback anim
+  }
+
   getForm() {
-    return this.form;
+    return this.mesh;
   }
 }
+
 
 /* Animates a Vector3 to the target */
 function animateVector3(vectorToAnimate, target, options){
@@ -87,7 +105,7 @@ function animateVector3(vectorToAnimate, target, options){
         .to({ x: to.x, y: to.y, z: to.z, }, duration)
         .easing(easing)
         .onUpdate(function(d) {
-            if(options.update){
+            if(options.update){ 
                 options.update(d);
             }
          })

@@ -15,39 +15,6 @@ var transportTime = 0.0;
 var keyDown;
 
 
-//key fired, record event...
-//time++ in animate();
-//now when key pressed...
-// Tone.Transport.schedule(function(time){
-// 	//callback
-// }, transportTime /*currentTime*/);
-//
-//
-// function keyDown( keyCode ){
-// 	if(record){
-// 		Tone.Transport.schedule(function(time){
-// 			//callback
-// 		}, transportTime);
-// 	}
-// 	playSound( keyCode );
-
-// }
-
-// function playSound( keyCode ){
-// 	if(keyCode == '38'){
-// 		drumMachine.triggerAttack("C3");
-// 		console.log('playSound');
-// 	} else if(keyCode == '70'){
-// 		drumMachine.triggerAttack("E3");
-// 	} else if(keyCode == '68'){
-// 		drumMachine.triggerAttack("G2");
-// 	} else if(keyCode == '65'){
-// 		drumMachine.triggerAttack("C4");
-// 	}
-// }
-
-
-
 /**********************************/
 
 var display = new Display(16, 4);
@@ -57,18 +24,33 @@ var forms = {};
 
 var keyMappings = {};
 
-keyMappings['ArrowUp'] = new Soundform(display, drumMachine, "C3", 50, 50);
-keyMappings['ArrowDown'] = new Soundform(display, drumMachine, "C4", 25, 25);
+// keyMappings['ArrowUp'] = new Soundform(display, drumMachine, "C3", 50, 50);
+// keyMappings['ArrowDown'] = new Soundform(display, drumMachine, "C4", 25, 25);
+
+
+var formOpts = {
+  'ArrowUp': { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
+          "material": new THREE.MeshBasicMaterial( { color: 0x00ff00 } ),
+          "duration": 400
+        }
+}
 
 // Handle key presses
 document.onkeydown = function(e) {
     e = e || window.event;
     e.preventDefault();
+
     console.log('key name: ' + e.key);
     console.log('are u working');
     var keyName = e.key;
     // keyMappings[keyName].playSound();
-    keyMappings[keyName].preview(800);
+    // keyMappings[keyName].preview(800);
+    var form = new Soundform(display, drumMachine, "C4", formOpts[keyName], 25, 25);
+
+    // if (e.keyCode == '72') {
+    //   cube = new Soundform(display, 50, 50, false, formOpts["bass"]);
+    // }
+
 };
 
 // Handle key presses

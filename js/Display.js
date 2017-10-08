@@ -22,12 +22,13 @@ class Display {
     this.animate();
   }
 
-  addForm(form) {
-    this.scene.add(form);
+  addForm(mesh) {
+    this.scene.add(mesh);
   }
 
-  removeForm(form) {
-    this.scene.remove(form);
+  removeForm(mesh) {
+    console.log("remove...");
+    this.scene.remove(mesh);
   }
 
   animate() {
@@ -35,11 +36,15 @@ class Display {
     // cube.rotation.x += 0.1;
     // cube.rotation.y += 0.1;
 
+
     for (var i  = 0; i < this.grid.length; i++) {
       for (var j = 0; j < this.grid[i].length; j++) {
         // update visuals?
       }
     }
+
+    TWEEN.update();
     this.renderer.render(this.scene, this.camera);
   };
+
 }
