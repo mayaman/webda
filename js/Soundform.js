@@ -1,5 +1,5 @@
 class Soundform {
-  constructor(display, drumMachine, sound, options, x, y, recordMode) {
+  constructor(display, drumMachine, options, x, y, recordMode) {
     this.recording = recordMode;
     this.display = display;
     this.drumMachine = drumMachine;

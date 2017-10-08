@@ -1,5 +1,5 @@
 class Display {
-  constructor(numColumns, maxTracksPerStep, recording) {
+  constructor(numColumns, maxTracksPerStep, currentBPM) {
 
     this.numColumns = numColumns;
     this.maxTracksPerStep = maxTracksPerStep;
@@ -18,6 +18,7 @@ class Display {
     this.animate = this.animate.bind(this);
 
     this.text = "not recording";
+    this.currentBPM = currentBPM;
     // this.geometry = new THREE.BoxGeometry( 10, 10, 10 );
     // this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
     // this.mesh = new THREE.Mesh( this.geometry, this.material);
@@ -88,7 +89,8 @@ class Display {
     var newFont;
   	loader.load( '../fonts/font.json', function ( font ) {
       self.setFont(font);
-  		self.drawText();
+  		self.drawRecordModeText();
+      self.drawBPMText();
     } );
   }
 
@@ -97,7 +99,7 @@ class Display {
     console.log(this.font);
   }
 
-  drawText() {
+  drawRecordModeText() {
     var geometry = new THREE.TextGeometry( this.text, {
 
 		  font: this.font,
@@ -110,25 +112,43 @@ class Display {
 		geometry.computeBoundingBox();
 
 		var centerOffset = -0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
-
+    var randomNum = Math.random();
 		var materials = [
-			new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, overdraw: 0.5 } ),
+			new THREE.MeshBasicMaterial( { color: 0xffffff, overdraw: 0.5 } ),
 			new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: 0.5 } )
 		];
 
-		this.words = new THREE.Mesh( geometry, materials );
+		this.recordModeText = new THREE.Mesh( geometry, materials );
+		this.recordModeText.position.x = -80;
+		this.recordModeText.position.y = -50;
+		this.recordModeText.position.z = 0;
+		this.scene.add( this.recordModeText );
+  }
 
-		this.words.position.x = -80;
-		this.words.position.y = -50;
-		this.words.position.z = 0;
+  drawBPMText() {
+    var bpmGeometry = new THREE.TextGeometry( "bpm: " + this.currentBPM, {
 
-		// mesh.rotation.x = 0;
-		// mesh.rotation.y = Math.PI * 2;
+		  font: this.font,
+			size: 10,
+			height: 10,
+			curveSegments: 2
 
-		// var group = new THREE.Group();
-		// group.add( mesh );
+		});
 
-		this.scene.add( this.words );
+		bpmGeometry.computeBoundingBox();
+
+		var centerOffset = -0.5 * ( bpmGeometry.boundingBox.max.x - bpmGeometry.boundingBox.min.x );
+    var randomNum = Math.random();
+		var materials = [
+			new THREE.MeshBasicMaterial( { color: 0xffffff, overdraw: 0.5 } ),
+			new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: 0.5 } )
+		];
+
+		this.bpmText = new THREE.Mesh( bpmGeometry, materials );
+		this.bpmText.position.x = 20;
+		this.bpmText.position.y = -50;
+		this.bpmText.position.z = 0;
+		this.scene.add( this.bpmText );
   }
 
   updateRecordMode() {
@@ -137,8 +157,14 @@ class Display {
     } else {
       this.text = "recording";
     }
-    this.scene.remove(this.words);
-    this.drawText();
+    this.scene.remove(this.recordModeText);
+    this.drawRecordModeText();
+  }
+
+  updateBPM(newBPM) {
+    this.currentBPM = newBPM;
+    this.scene.remove(this.bpmText);
+    this.drawBPMText();
   }
 
 }

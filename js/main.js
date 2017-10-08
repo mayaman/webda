@@ -6,10 +6,18 @@ var currentCol = 0;
 
 var currentBPM = 120;
 
+var pad = new Tone.Synth({
+		"oscillator" : {"type" : "sine"},
+		"envelope" : {"attack" : "0.8", "decay" : "2.0", "sustain" : "0.0", "release" : "4.0"}
+	}).toMaster();
+pad.oscillator.detune = 0.8;
+
 //in init
 var drumMachine = new Tone.Sampler({
-		"C3" : "sound/Rsn_404_loose.wav",
-		"C4" : "sound/808_Cowbell.wav"
+		"C3" : "Rsn_404_loose.wav",
+		"C4" : "808_Cowbell.mp3",
+		"C5" : "EC-1_clap.wav",
+		"C6" : "woodblock.wav"
 	}, function(){
 		drumMachine.triggerAttack("C3");
 }).toMaster();
@@ -23,7 +31,7 @@ var keyDown;
 
 /**********************************/
 
-var display = new Display(16, 4);
+var display = new Display(16, 4, currentBPM);
 display.animate();
 
 var forms = {};
@@ -69,12 +77,14 @@ document.onkeydown = function(e) {
       display.updateRecordMode();
     } else if (keyName == '=') {
       console.log('up');
-      currentBPM+=10;
+      currentBPM+=1;
+      display.updateBPM(currentBPM);
       //ramp the bpm to 120 over 10 seconds
       Tone.Transport.bpm.rampTo(currentBPM, 1);
     } else if (keyName == '-') {
       console.log('up');
-      currentBPM-=10;
+      currentBPM-=1;
+      display.updateBPM(currentBPM);
       Tone.Transport.bpm.rampTo(currentBPM, 1);
     }
     else {
