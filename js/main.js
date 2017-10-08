@@ -56,7 +56,7 @@ document.onkeydown = function(e) {
     var keyName = e.key;
 
     if (e.keyCode == 32) {
-      record = true;
+      record = (record) ? false : true ;
       return;
     } else if (!keyMappings[keyName]) {
       return; //don't cause error if press non-mapped key
