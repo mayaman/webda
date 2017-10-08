@@ -14,10 +14,10 @@ pad.oscillator.detune = 0.8;
 
 //in init
 var drumMachine = new Tone.Sampler({
-		"C3" : "soundLab - Stereo Out - kick.wav",
-		"C4" : "soundLab - Stereo Out - snare.wav",
-		"C5" : "soundLab - Stereo Out - HH-Open.wav",
-		"C6" : "soundLab - Stereo Out - HH-Closed.wav"
+		"C3" : "sound/kick.wav",
+		"C4" : "sound/snare.wav",
+		"C5" : "sound/HH_Open.wav",
+		"C6" : "sound/HH_Closed.wav"
 	}, function(){
 		drumMachine.triggerAttack("C3");
 }).toMaster();
