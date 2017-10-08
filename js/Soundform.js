@@ -1,49 +1,68 @@
 class Soundform {
-  constructor(display, drumMachine, options, x, y) {
-    x = x || 0;
-    y = y || 0;
-
+  constructor(display, drumMachine, options, x, y, recordMode) {
+    this.recording = recordMode;
     this.display = display;
     this.drumMachine = drumMachine;
-    this.sound = options.sound;
-    this.color = options.material.color;
+
+    this.noteName = options.noteName;
+    console.log(options);
     // this.geometry = new THREE.BoxGeometry( 10, 10, 10 );
     // this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    this.color = options.material.color;
     this.mesh = new THREE.Mesh( options.geometry, options.material);
-    this.mesh.position.x = x;
-    this.mesh.position.y = y;
-    this.mesh.scale.x = .01;
-    this.mesh.scale.y = .01;
-    this.mesh.scale.z = .01;
-    this.addToScene();
-    this.dur = options.duration;
-    if (x != 0 && y != 0) {
-      this.place(x,y)
-    } else {
-      this.preview();
-    }
+    this.x = x;
+    this.y = options.row;
+    this.mesh.position.x = this.mapXPos(x);
+    this.mesh.position.y = this.mapYPos(this.y);
 
+    console.log('recording: ' + this.recording);
+    if (!this.recording) {
+      this.mesh.position.x = 0;
+      this.mesh.position.y = 0;
+      this.mesh.position.z = 30;
+      this.mesh.scale.x = .01;
+      this.mesh.scale.y = .01;
+      this.mesh.scale.z = .01;
+      this.dur = options.duration;
+      this.preview();
+    } else {
+      console.log('place');
+      this.addSound();
+      // this.place(x,y);
+    }
   }
 
+  mapXPos(pos) {
+    return -80 + pos*25;
+  }
+
+  mapYPos(pos) {
+    return pos*20;
+  }
+
+
   addToScene() {
-    this.display.addForm(this.mesh);
+    // this.mesh = new THREE.Mesh( this.geometry, this.material);
+    this.display.addForm(this, this.x, this.y);
   }
 
   removeFromScene(self) {
-    this.display.removeForm(self.mesh);
+    this.display.removeForm(self);
   }
 
   playSound() {
-    this.drumMachine.triggerAttack(this.sound);
+    console.log('playing sound');
+    this.drumMachine.triggerAttack(this.noteName);
+    this.addToScene();
   }
 
   preview() {
     this.display.scene.background = new THREE.Color( 0x563FE8 );
-
     this.playSound();
     var dur = this.dur;
-    //animate scale in
-    var targetIn = new THREE.Vector3(5, 5, 5); // create on init
+
+
+    var targetIn = new THREE.Vector3(3, 3, 3); // create on init
     animateVector3(this.mesh.scale, targetIn, {
       duration: dur/3,
       easing : TWEEN.Easing.Bounce.In,
@@ -51,33 +70,34 @@ class Soundform {
               //console.log("Updating Tween: " + d);
           },
           callback : function(){
-              console.log("Completed Tween");
+              console.log("Completed out Tween");
               //TODO: WAIT FOR DURATION TO END???
           }
     });
+
 
     //destroy
     var self = this;
-    window.setTimeout(function(dur) {
-      var targetOut = new THREE.Vector3(.1, .1, .1);
+    window.setTimeout(function() {
+      var targetOut = new THREE.Vector3(1, 1, 1);
       animateVector3(self.mesh.scale, targetOut, {
-      duration: dur/3,
-      easing : TWEEN.Easing.Bounce.Out,
-          update: function(d) {
-              //console.log("Updating Tween: " + d);
-          },
-          callback : function(){
-              console.log("Completed Tween");
-              //TODO: WAIT FOR DURATION TO END???
-          }
-    });
+        duration: dur/3,
+        easing : TWEEN.Easing.Bounce.Out,
+            update: function(d) {
+                //console.log("Updating Tween: " + d);
+            },
+            callback : function(){
+                // console.log("Completed Tween");
+                //TODO: WAIT FOR DURATION TO END???
+            }
+      });
+    } , (self.dur/3) * 2);
 
-    }, (dur/3) * 2);
 
     window.setTimeout(function() { 
-      this.display.scene.background = new THREE.Color( 0x000000 );
+      self.display.scene.background = self.display.mainBg;
       self.removeFromScene(self)
-    }, dur + 10);
+    }, self.dur + 100);
   }
 
   place( x, y ) {
@@ -173,7 +193,6 @@ class Soundform {
 
       //self.mesh.material.color = color;
     }, (dur/2) );
-
   }
 
   getForm() {

@@ -2,6 +2,10 @@
 
 //Tone.Master.volume = 0;
 
+var currentCol = 0;
+
+var currentBPM = 120;
+
 //in init
 var drumMachine = new Tone.Sampler({
 		"C3" : "sound/Rsn_404_loose.wav",
@@ -10,7 +14,9 @@ var drumMachine = new Tone.Sampler({
 		drumMachine.triggerAttack("C3");
 }).toMaster();
 
-var record = false;
+var drumNoteNames = ["C3", "C4", "C3", "C4"];
+
+var recording = false;
 var transportTime = 0.0;
 var keyDown;
 
@@ -22,54 +28,58 @@ display.animate();
 
 var forms = {};
 
-var formOpts = {
-  'cowbell': { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
-          "material": new THREE.MeshBasicMaterial( { color: 0xB246FF } ),
-          "duration": 400,
-          "sound": "C4"
-        },
-  'loose': { "geometry": new THREE.ConeGeometry( 10, 20, 32 ),
-          "material": new THREE.MeshBasicMaterial( { color: 0x5286FF } ),
-          "duration": 400,
-          "sound": "C3"
-        },
-  'bass': { "geometry": new THREE.DodecahedronGeometry( 10, 0),
-        "material": new THREE.MeshBasicMaterial( { color: 0x46FFDE } ),
-        "duration": 400,
-        "sound": "C4"
-      }
-}
-
 var keyMappings = {};
 
-keyMappings['w'] = formOpts["cowbell"];
-keyMappings['ArrowUp'] = formOpts["cowbell"];
-keyMappings['e'] = formOpts["loose"];
-keyMappings['r'] = formOpts["bass"];
+// keyMappings['ArrowUp'] = new Soundform(display, drumMachine, "C3", 50, 50);
+// keyMappings['ArrowDown'] = new Soundform(display, drumMachine, "C4", 25, 25);
+
+
+var formOpts = {
+  'q': { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
+          "material": new THREE.MeshBasicMaterial( { color: 0xB246FF} ),
+          "duration": 400,
+          "row": 0,
+          "noteName": "C3"
+        },
+  'w': { "geometry": new THREE.ConeGeometry( 10, 20, 32 ),
+          "material": new THREE.MeshBasicMaterial( { color: 0x5286FF } ),
+          "duration": 400,
+          "row": 1,
+          "noteName": "C4"
+        },
+  'e': { "geometry": new THREE.DodecahedronGeometry( 10, 0),
+        "material": new THREE.MeshBasicMaterial( { color: 0x46FFDE } ),
+          "duration": 400,
+          "row": 2,
+          "noteName": "C4"
+        }
+}
 
 // Handle key presses
 document.onkeydown = function(e) {
     e = e || window.event;
     e.preventDefault();
-
+    //
     console.log('key name: ' + e.key);
     var keyName = e.key;
 
-    if (e.keyCode == 32) {
-      record = (record) ? false : true ;
-      return;
-    } else if (!keyMappings[keyName]) {
-      return; //don't cause error if press non-mapped key
-    }
-
-    if (!record) {
-      x = 0; y = 0;
+    // keyMappings[keyName].playSound();
+    // keyMappings[keyName].preview(800);
+    if (e.keyCode == '32') {
+      recording = !recording;
+      display.updateRecordMode();
+    } else if (keyName == '=') {
+      console.log('up');
+      currentBPM+=10;
+      //ramp the bpm to 120 over 10 seconds
+      Tone.Transport.bpm.rampTo(currentBPM, 1);
+    } else if (keyName == '-') {
+      console.log('up');
+      currentBPM-=10;
+      Tone.Transport.bpm.rampTo(currentBPM, 1);
     } else {
-      x = 25; y = 25; //actually set this foreal later
+      var form = new Soundform(display, drumMachine, formOpts[keyName], currentCol, 0, recording);
     }
-    console.log(x);
-    form = new Soundform(display, drumMachine, keyMappings[keyName], x, y);
-
 
     // if (e.keyCode == '72') {
     //   cube = new Soundform(display, 50, 50, false, formOpts["bass"]);
@@ -84,6 +94,50 @@ document.onkeyup = function(e) {
     var keyName = e.key;
 
 };
+
+var loop = new Tone.Sequence(function(time, col){
+      // console.log('col: ' + col);
+      currentCol = col;
+      var column = display.getColumn(col);
+			for (var i = 0; i < 4; i++){
+        // console.log('column[i]: ' + column[i]);
+				if (column[i] != null){
+					//slightly randomized velocities
+					// var vel = Math.random() * 0.5 + 0.5;
+          column[i].playSound();
+          column[i].jiggle(400);
+				}
+			}
+		}, [0, 1, 2, 3, 4, 5, 6, 7], "8n");
+
+Tone.Transport.start();
+
+Tone.Transport.bpm.value = currentBPM;
+
+loop.start();
+
+
+var lastScrollTop = 0;
+window.scroll(0, 10);
+// element should be replaced with the actual target element on which you have applied scroll, use window in case of no target element.
+window.addEventListener("scroll", function(){ // or window.addEventListener("scroll"....
+    console.log('scrolllllllin');
+  lastScrollTop = 0;
+   var st = window.pageYOffset; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
+   if (st > lastScrollTop){
+       // downscroll code
+      console.log('down');
+      window.scroll(0, -5);
+   } else if (st == lastScrollTop) {
+      console.log('up?');
+   } else {
+     // upscroll code
+     console.log('up');
+     window.scroll(0, 5);
+    }
+  lastScrollTop = st;
+}, false);
+
 
 
 function onWindowResize( event ) {

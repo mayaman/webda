@@ -1,0 +1,130 @@
+{
+	"metadata": {
+		"type": "App"
+	},
+	"project": {
+		"gammaInput": false,
+		"gammaOutput": false,
+		"shadows": true,
+		"vr": false
+	},
+	"camera": {
+		"metadata": {
+			"version": 4.5,
+			"type": "Object",
+			"generator": "Object3D.toJSON"
+		},
+		"object": {
+			"uuid": "E88FB60C-496F-4173-9A59-C7FCE7069300",
+			"type": "PerspectiveCamera",
+			"name": "Camera",
+			"matrix": [-0.950178,0,0.311709,0,0.214922,0.724288,0.655145,0,-0.225767,0.689498,-0.688202,0,-4.720644,14.056834,-15.78355,1],
+			"fov": 50,
+			"zoom": 1,
+			"near": 0.1,
+			"far": 10000,
+			"focus": 10,
+			"aspect": 1.805556,
+			"filmGauge": 35,
+			"filmOffset": 0
+		}
+	},
+	"scene": {
+		"metadata": {
+			"version": 4.5,
+			"type": "Object",
+			"generator": "Object3D.toJSON"
+		},
+		"geometries": [
+			{
+				"uuid": "B28013E3-BFBC-443D-9DE6-E07AD8946059",
+				"type": "BoxBufferGeometry",
+				"width": 1,
+				"height": 1,
+				"depth": 1
+			}],
+		"materials": [
+			{
+				"uuid": "785F1AF5-9B95-4BBE-9629-7AD8F6E90A9B",
+				"type": "MeshPhongMaterial",
+				"color": 16711923,
+				"emissive": 0,
+				"specular": 1118481,
+				"shininess": 30,
+				"depthFunc": 3,
+				"depthTest": true,
+				"depthWrite": true
+			}],
+		"object": {
+			"uuid": "CC3C2CC3-720E-437A-8C80-DB47ADC94013",
+			"type": "Scene",
+			"name": "Scene",
+			"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+			"children": [
+				{
+					"uuid": "377A9B8E-80AB-4F69-8FA9-CFFC0B2087CB",
+					"type": "Mesh",
+					"name": "Box 1",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+					"geometry": "B28013E3-BFBC-443D-9DE6-E07AD8946059",
+					"material": "785F1AF5-9B95-4BBE-9629-7AD8F6E90A9B"
+				},
+				{
+					"uuid": "B7312FB4-B877-403D-B60E-A485A78E3821",
+					"type": "HemisphereLight",
+					"name": "HemisphereLight 3",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,10,0,1],
+					"color": 7923455,
+					"intensity": 1,
+					"groundColor": 3358680
+				},
+				{
+					"uuid": "058AAEA4-83DE-454F-AFD2-3FB543EE376C",
+					"type": "DirectionalLight",
+					"name": "DirectionalLight 4",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,5,10,7.5,1],
+					"color": 16777215,
+					"intensity": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "D7A0B7F1-AA1C-4D2A-ADB5-55945C338475",
+							"type": "OrthographicCamera",
+							"zoom": 1,
+							"left": -5,
+							"right": 5,
+							"top": 5,
+							"bottom": -5,
+							"near": 0.5,
+							"far": 500
+						}
+					}
+				},
+				{
+					"uuid": "00D3FD24-6B74-433F-8819-BFEC1F5AE2B9",
+					"type": "PointLight",
+					"name": "PointLight 5",
+					"matrix": [3.64494,0,0,0,0,3.64494,0,0,0,0,3.64494,0,-7.751354,0,-5.00024,1],
+					"color": 16777215,
+					"intensity": 1,
+					"distance": 0,
+					"decay": 1,
+					"shadow": {
+						"camera": {
+							"uuid": "55B83E4C-7816-4552-8EF0-9C1B79DE8ADB",
+							"type": "PerspectiveCamera",
+							"fov": 90,
+							"zoom": 1,
+							"near": 0.5,
+							"far": 500,
+							"focus": 10,
+							"aspect": 1,
+							"filmGauge": 35,
+							"filmOffset": 0
+						}
+					}
+				}],
+			"background": 11709420
+		}
+	},
+	"scripts": {}
+}
