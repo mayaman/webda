@@ -1,6 +1,7 @@
 var display = new Display(16, 4);
-var form = new Soundform();
 display.animate();
+
+var forms = {};
 
 // Handle key presses
 document.onkeydown = function(e) {
@@ -9,7 +10,26 @@ document.onkeydown = function(e) {
 
     if (e.keyCode == '38') {
       console.log('up');
-      display.addForm(form.getForm());
+      forms['38'] = (new Soundform(display, 50, 50));
+    }
+    else if (e.keyCode == '40') {
+    }
+    else if (e.keyCode == '37') {
+    }
+    else if (e.keyCode == '39') {
+
+    } else if (e.keyCode == '32') {
+    }
+};
+
+// Handle key presses
+document.onkeyup = function(e) {
+    e = e || window.event;
+    e.preventDefault();
+
+    if (e.keyCode == '38') {
+      // console.log('up');
+      // display.removeForm(form.getForm());
     }
     else if (e.keyCode == '40') {
     }

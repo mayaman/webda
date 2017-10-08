@@ -17,6 +17,10 @@ class Display {
     this.scene.add(form);
   }
 
+  removeForm(form) {
+    this.scene.remove(form);
+  }
+
   animate() {
     requestAnimationFrame( this.animate );
     // cube.rotation.x += 0.1;
