@@ -3,13 +3,24 @@ display.animate();
 
 var forms = {};
 
+
+var formOpts = {
+  "bass": { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
+          "material": new THREE.MeshBasicMaterial( { color: 0x00ff00 } ),
+          "duration": 400 
+        }
+}
+
 // Handle key presses
 document.onkeydown = function(e) {
     e = e || window.event;
     e.preventDefault();
 
+    if (e.keyCode == '72') {
+      cube = new Soundform(display, 50, 50, false, formOpts["bass"]);
+    }
+
     if (e.keyCode == '38') {
-      console.log('up');
       forms['38'] = (new Soundform(display, 50, 50));
     }
     else if (e.keyCode == '40') {

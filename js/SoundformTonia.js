@@ -1,9 +1,3 @@
-forms = {
-    "bass": { geometry = new THREE.BoxGeometry( 10, 10, 10 ),
-            material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
-          }
-}
-
 class Soundform {
   constructor(display, x, y, recordMode, options) {
     recordMode = recordMode || false;
@@ -11,7 +5,7 @@ class Soundform {
     y = y || 0;
 
     this.display = display;
-
+    this.name = "cube";
     this.mesh = new THREE.Mesh( options.geometry, options.material);
     this.mesh.position.x = 0;
     this.mesh.position.y = 0;
@@ -21,39 +15,57 @@ class Soundform {
     this.addSound();
 
     if (!recordMode) {
-      this.preview();
+      this.preview(options.duration);
     } else {
       this.place(x,y);
     }
   }
 
   addSound() {
-    this.display.addForm(this.mesh);
+    //this.display.addForm(this.mesh);
+    this.display.scene.add(this.mesh);
   }
 
-  removeSound() {
-    this.display.removeForm(this.mesh);
+  removeSound(self) {
+    console.log("hi");
+    this.display.removeForm(self.mesh);
   }
 
-  preview() {
+  preview(length) {
 
     //animate scale in
-    var target = new THREE.Vector3(1, 1, 1); // create on init
-    animateVector3(this.mesh.scale, target, {
-    duration: 100, 
-    easing : TWEEN.Easing.Bounce.InOut,
-        update: function(d) {
-            //console.log("Updating Tween: " + d);
-        },
-        callback : function(){
-            console.log("Completed Tween");
-            //TODO: WAIT FOR DURATION TO END???
-
-        }
+    var targetIn = new THREE.Vector3(1, 1, 1); // create on init
+    animateVector3(this.mesh.scale, targetIn, {
+      duration: length/3, 
+      easing : TWEEN.Easing.Bounce.In,
+          update: function(d) {
+              //console.log("Updating Tween: " + d);
+          },
+          callback : function(){
+              console.log("Completed Tween");
+              //TODO: WAIT FOR DURATION TO END???
+          }
     });
-    //animate fade in
 
     //destroy
+    var self = this;
+    window.setTimeout(function() { 
+      var targetOut = new THREE.Vector3(0, 0, 0);
+      animateVector3(self.mesh.scale, targetOut, {
+      duration: length/3, 
+      easing : TWEEN.Easing.Bounce.Out,
+          update: function(d) {
+              //console.log("Updating Tween: " + d);
+          },
+          callback : function(){
+              console.log("Completed Tween");
+              //TODO: WAIT FOR DURATION TO END???
+          }
+    });
+      
+    }, (length/3) * 2);
+
+    window.setTimeout(function() { self.removeSound(self) }, length + 10);
   }
 
   place(step) {
