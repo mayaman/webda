@@ -16,10 +16,14 @@ class Soundform {
     // this.preview(options.duration);
     console.log('recording: ' + this.recording);
     if (!this.recording) {
+      this.mesh.position.x = 0;
+      this.mesh.position.y = 0;
+      this.mesh.position.z = 30;
       this.mesh.scale.x = .01;
       this.mesh.scale.y = .01;
       this.mesh.scale.z = .01;
-      this.preview(options.duration);
+      this.dur = options.duration;
+      this.preview();
     } else {
       console.log('place');
       this.addSound();
@@ -46,8 +50,8 @@ class Soundform {
 
   playSound() {
     console.log('playing sound');
-    this.addSound();
     this.drumMachine.triggerAttack(this.noteName);
+    this.addSound();
     var self = this;
     if (!this.recording) {
       window.setTimeout(function() {self.removeSound(self)},800);
@@ -55,40 +59,46 @@ class Soundform {
   }
 
   preview(length) {
+    // this.display.scene.background = new THREE.Color( 0x563FE8 );
     this.playSound();
     //animate scale in
-    var targetIn = new THREE.Vector3(1, 1, 1); // create on init
+    var dur = this.dur;
+    //animate scale in
+    var targetIn = new THREE.Vector3(3, 3, 3); // create on init
     animateVector3(this.mesh.scale, targetIn, {
-      duration: length/3,
-      easing : TWEEN.Easing.Bounce.In,
-          update: function(d) {
-              //console.log("Updating Tween: " + d);
-          },
-          callback : function(){
-              console.log("Completed Tween");
-              //TODO: WAIT FOR DURATION TO END???
-          }
+    duration: dur/3,
+    easing : TWEEN.Easing.Bounce.In,
+        update: function(d) {
+            //console.log("Updating Tween: " + d);
+        },
+        callback : function(){
+            console.log("Completed Tween");
+            //TODO: WAIT FOR DURATION TO END???
+        }
     });
 
     //destroy
     var self = this;
-    window.setTimeout(function() {
-      var targetOut = new THREE.Vector3(0, 0, 0);
-      animateVector3(self.mesh.scale, targetOut, {
-      duration: length/3,
-      easing : TWEEN.Easing.Bounce.Out,
-          update: function(d) {
-              //console.log("Updating Tween: " + d);
-          },
-          callback : function(){
-              console.log("Completed Tween");
-              //TODO: WAIT FOR DURATION TO END???
-          }
+    window.setTimeout(function(dur) {
+    var targetOut = new THREE.Vector3(.1, .1, .1);
+    animateVector3(self.mesh.scale, targetOut, {
+    duration: dur/3,
+    easing : TWEEN.Easing.Bounce.Out,
+        update: function(d) {
+            //console.log("Updating Tween: " + d);
+        },
+        callback : function(){
+            console.log("Completed Tween");
+            //TODO: WAIT FOR DURATION TO END???
+        }
     });
 
-    }, (length/3) * 2);
+    }, (dur/3) * 2);
 
-    window.setTimeout(function() { self.removeSound(self) }, length + 10);
+    window.setTimeout(function() {
+    this.display.scene.background = new THREE.Color( 0x000000 );
+    self.removeSound(self)
+    }, dur + 10);
   }
 
   place(step) {

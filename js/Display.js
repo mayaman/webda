@@ -1,9 +1,10 @@
 class Display {
   constructor(numColumns, maxTracksPerStep, recording) {
+
     this.numColumns = numColumns;
     this.maxTracksPerStep = maxTracksPerStep;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( 0x563FE8 );
+    this.scene.background = new THREE.Color( 0x000000 );
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
     this.camera.position.z = 100;
 
@@ -12,7 +13,7 @@ class Display {
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( window.innerWidth, window.innerHeight );
-    this.renderer.setClearColorHex( 0x563FE8, 1 );
+    // this.renderer.setClearColorHex( 0x563FE8, 1 );
     document.body.appendChild( this.renderer.domElement );
     this.animate = this.animate.bind(this);
 
@@ -87,7 +88,7 @@ class Display {
     var newFont;
   	loader.load( '../fonts/font.json', function ( font ) {
       self.setFont(font);
-  		self.drawText( font );
+  		self.drawText();
     } );
   }
 
@@ -96,7 +97,7 @@ class Display {
     console.log(this.font);
   }
 
-  drawText(font) {
+  drawText() {
     var geometry = new THREE.TextGeometry( this.text, {
 
 		  font: this.font,

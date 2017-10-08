@@ -36,15 +36,21 @@ var keyMappings = {};
 
 var formOpts = {
   'q': { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
-          "material": new THREE.MeshBasicMaterial( { color: 0x00ff00 } ),
+          "material": new THREE.MeshBasicMaterial( { color: 0xB246FF} ),
           "duration": 400,
           "row": 0,
           "noteName": "C3"
         },
-  'w': { "geometry": new THREE.BoxGeometry( 10, 10, 10 ),
-          "material": new THREE.MeshBasicMaterial( { color: 0x00ffff } ),
+  'w': { "geometry": new THREE.ConeGeometry( 10, 20, 32 ),
+          "material": new THREE.MeshBasicMaterial( { color: 0x5286FF } ),
           "duration": 400,
           "row": 1,
+          "noteName": "C4"
+        },
+  'e': { "geometry": new THREE.DodecahedronGeometry( 10, 0),
+        "material": new THREE.MeshBasicMaterial( { color: 0x46FFDE } ),
+          "duration": 400,
+          "row": 2,
           "noteName": "C4"
         }
 }
