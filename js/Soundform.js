@@ -1,13 +1,11 @@
 class Soundform {
   constructor(display, drumMachine, options, x, y, recordMode) {
+    this.type = "on";
     this.recording = recordMode;
     this.display = display;
     this.drumMachine = drumMachine;
-
+    console.log('options: ' + options);
     this.noteName = options.noteName;
-    console.log(options);
-    // this.geometry = new THREE.BoxGeometry( 10, 10, 10 );
-    // this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
     this.color = options.material.color;
     this.mesh = new THREE.Mesh( options.geometry, options.material);
     this.x = x;
@@ -15,7 +13,6 @@ class Soundform {
     this.mesh.position.x = this.mapXPos(x);
     this.mesh.position.y = this.mapYPos(this.y);
 
-    console.log('recording: ' + this.recording);
     if (!this.recording) {
       this.mesh.position.x = 0;
       this.mesh.position.y = 0;
@@ -26,7 +23,6 @@ class Soundform {
       this.dur = options.duration;
       this.preview();
     } else {
-      console.log('place');
       this.addToScene();
       // this.place(this.mesh.position.x, this.mesh.position.y);
     }
@@ -37,7 +33,7 @@ class Soundform {
   }
 
   mapYPos(pos) {
-    return pos*20;
+    return -20 + pos*20;
   }
 
 
@@ -70,7 +66,7 @@ class Soundform {
               //console.log("Updating Tween: " + d);
           },
           callback : function(){
-              console.log("Completed out Tween");
+              // console.log("Completed out Tween");
               //TODO: WAIT FOR DURATION TO END???
           }
     });
@@ -107,10 +103,10 @@ class Soundform {
       duration: 500,
       easing : TWEEN.Easing.Elastic.Out,
           update: function(d) {
-              console.log("Updating Tween: " + d);
+              // console.log("Updating Tween: " + d);
           },
           callback : function(){
-              console.log("Completed Tween");
+              // console.log("Completed Tween");
           }
     });
 
@@ -119,10 +115,10 @@ class Soundform {
       duration: 500,
       easing : TWEEN.Easing.Elastic.Out,
           update: function(d) {
-              console.log("Updating Tween: " + d);
+              // console.log("Updating Tween: " + d);
           },
           callback : function(){
-              console.log("Completed Tween");
+              // console.log("Completed Tween");
           }
     });
   }
@@ -148,7 +144,7 @@ class Soundform {
               //console.log("Updating Tween: " + d);
           },
           callback : function(){
-              console.log("Completed Tween");
+              // console.log("Completed Tween");
           }
     });
 
@@ -159,7 +155,7 @@ class Soundform {
               //console.log("Updating Tween: " + d);
           },
           callback : function(){
-              console.log("Completed Tween");
+              // console.log("Completed Tween");
           }
     });
 
@@ -174,7 +170,7 @@ class Soundform {
                 //console.log("Updating Tween: " + d);
             },
             callback : function(){
-                console.log("Completed Tween down");
+                // console.log("Completed Tween down");
                 //TODO: WAIT FOR DURATION TO END???
             }
       });
@@ -186,7 +182,7 @@ class Soundform {
                 //console.log("Updating Tween: " + d);
             },
             callback : function(){
-                console.log("Completed Tween down");
+                // console.log("Completed Tween down");
                 //TODO: WAIT FOR DURATION TO END???
             }
       });
