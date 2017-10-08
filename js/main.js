@@ -14,15 +14,15 @@ pad.oscillator.detune = 0.8;
 
 //in init
 var drumMachine = new Tone.Sampler({
-		"C3" : "Rsn_404_loose.wav",
-		"C4" : "808_Cowbell.mp3",
-		"C5" : "EC-1_clap.wav",
-		"C6" : "woodblock.wav"
+		"C3" : "soundLab - Stereo Out - kick.wav",
+		"C4" : "soundLab - Stereo Out - snare.wav",
+		"C5" : "soundLab - Stereo Out - HH-Open.wav",
+		"C6" : "soundLab - Stereo Out - HH-Closed.wav"
 	}, function(){
 		drumMachine.triggerAttack("C3");
 }).toMaster();
 
-var drumNoteNames = ["C3", "C4", "C3", "C4"];
+var drumNoteNames = ["C3", "C4", "C5", "C6"];
 
 var recording = false;
 var transportTime = 0.0;
@@ -49,7 +49,7 @@ var formOpts = {
           "row": 0,
           "noteName": "C3"
         },
-  'w': { "geometry": new THREE.ConeGeometry( 10, 20, 32 ),
+  'w': { "geometry": new THREE.ConeGeometry( 5, 10, 32 ),
           "material": new THREE.MeshBasicMaterial( { color: 0x5286FF } ),
           "duration": 400,
           "row": 1,
@@ -59,7 +59,13 @@ var formOpts = {
         "material": new THREE.MeshBasicMaterial( { color: 0x46FFDE } ),
           "duration": 400,
           "row": 2,
-          "noteName": "C4"
+          "noteName": "C5"
+        },
+  'r': { "geometry": new THREE.DodecahedronGeometry( 10, 0),
+        "material": new THREE.MeshBasicMaterial( { color: 0x46FFDE } ),
+          "duration": 400,
+          "row": 3,
+          "noteName": "C6"
         }
 }
 
@@ -88,7 +94,7 @@ document.onkeydown = function(e) {
       Tone.Transport.bpm.rampTo(currentBPM, 1);
     }
     else {
-      var form = new Soundform(display, drumMachine, "C3", formOpts[keyName], currentCol, 0, recording);
+      var form = new Soundform(display, drumMachine, formOpts[keyName], currentCol, 0, recording);
     }
     // if (e.keyCode == '72') {
     //   cube = new Soundform(display, 50, 50, false, formOpts["bass"]);

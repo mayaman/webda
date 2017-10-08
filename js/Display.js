@@ -4,7 +4,7 @@ class Display {
     this.numColumns = numColumns;
     this.maxTracksPerStep = maxTracksPerStep;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( 0x000000 );
+    // this.scene.background = new THREE.Color( 0x000000 );
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
     this.camera.position.z = 100;
 
@@ -49,6 +49,8 @@ class Display {
     }
     this.loadFont();
     this.animate();
+    this.mainBg = new THREE.Color( 0xB2ACEA )
+    this.scene.background = this.mainBg;
   }
 
   getColumn(col) {
